@@ -1,6 +1,32 @@
-import { chromium, firefox, webkit } from 'playwright';
+import { Page, chromium, firefox, webkit } from 'playwright';
 import rgb2hex from 'rgb2hex';
 import { colorToHex } from './color';
+
+const getPage = async ({
+  height,
+  width,
+  url,
+  headless = true,
+}: {
+  height: number;
+  width: number;
+  url: string;
+  headless?: boolean;
+}) => {
+  const browser = await chromium.launch({
+    headless,
+  });
+  const page = await browser.newPage();
+
+  await page.setViewportSize({
+    height: height,
+    width: width,
+  });
+
+  await page.goto(url);
+
+  return page;
+};
 
 export const getDivs = async ({
   height,
