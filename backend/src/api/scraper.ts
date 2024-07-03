@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/divs', async (req, res) => {
   res.json(
     await getDivs({
-      url: 'https://www.purduepool.com',
+      url: 'https://www.amazon.com',
       height: 1080,
       width: 1920,
     })
