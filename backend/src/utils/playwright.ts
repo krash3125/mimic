@@ -27,7 +27,7 @@ const getPage = async ({
 
   return page;
 };
-
+// TODO
 export const getDivs = async ({
   height,
   width,
@@ -69,10 +69,12 @@ export const getDivs = async ({
 
       const bg = colorToHex(computed.backgroundColor);
 
+
       let data = {
         ...box,
         bg: bg.hex,
         alpha: bg.alpha,
+        borderRadius: computed.borderRadius
       };
 
       if (
@@ -99,6 +101,7 @@ export const getDivs = async ({
         ...data,
         bg: bg.hex,
         alpha: bg.alpha,
+        borderRadius: computed.borderRadius
       });
     }
   }
