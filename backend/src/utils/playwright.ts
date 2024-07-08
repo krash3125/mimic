@@ -2,7 +2,7 @@ import { Page, chromium, firefox, webkit } from 'playwright';
 import rgb2hex from 'rgb2hex';
 import { colorToHex } from './color';
 
-const getPage = async ({
+export const getPage = async ({
   height,
   width,
   url,
@@ -27,7 +27,8 @@ const getPage = async ({
 
   return page;
 };
-// TODO
+
+// http://localhost:5000/api/v1/scrape/divs
 export const getDivs = async ({
   height,
   width,
@@ -69,12 +70,11 @@ export const getDivs = async ({
 
       const bg = colorToHex(computed.backgroundColor);
 
-
       let data = {
         ...box,
         bg: bg.hex,
         alpha: bg.alpha,
-        borderRadius: computed.borderRadius
+        borderRadius: computed.borderRadius,
       };
 
       if (
@@ -101,7 +101,7 @@ export const getDivs = async ({
         ...data,
         bg: bg.hex,
         alpha: bg.alpha,
-        borderRadius: computed.borderRadius
+        borderRadius: computed.borderRadius,
       });
     }
   }
@@ -110,8 +110,9 @@ export const getDivs = async ({
   return lst;
 };
 
+// http://localhost:5000/api/v1/scrape/text
 export const getTexts = async () => {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
   const height = 1920;
@@ -122,7 +123,7 @@ export const getTexts = async () => {
     width: width,
   });
 
-  await page.goto('https://amazon.com');
+  await page.goto('https://purduepool.com');
 
   const texts = await page.$$('h1, h2, h3, h4, h5, h6, p, a');
 
@@ -149,34 +150,7 @@ export const getTexts = async () => {
     lst.push({ ...boundingBox });
   }
 
-  // const computed = await text?.evaluate((el) => window.getComputedStyle(el));
-  // const boundingBox = await text?.boundingBox();
-  // console.log(text?.asElement());
-
   await browser.close();
 
   return lst;
-
-  // for (const div of divs) {
-  //   if (await div.isVisible()) {
-  //     const box = await div.boundingBox();
-
-  //     const computed = await div.evaluate((el) => {
-  //       return window.getComputedStyle(el);
-  //     });
-
-  //     const bg = colorToHex(computed.backgroundColor);
-
-  //     console.log(bg);
-  //     if (bg.alpha !== 0) {
-  //       lst.push({
-  //         ...box,
-  //         bg: bg.hex,
-  //         alpha: bg.alpha,
-  //       });
-  //     }
-  //   }
-  // }
-
-  await browser.close();
 };

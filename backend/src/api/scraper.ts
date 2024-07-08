@@ -1,7 +1,7 @@
 import express from 'express';
 import rgb2hex from 'rgb2hex';
 import { chromium, firefox, webkit } from 'playwright';
-import { getDivs, getTexts } from '../utils/playwright';
+import { getDivs, getPage, getTexts } from '../utils/playwright';
 import Color from 'colorjs.io';
 import { colorToHex } from '../utils/color';
 
@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/divs', async (req, res) => {
   res.json(
     await getDivs({
-      url: 'https://www.amazon.com',
+      url: 'https://www.purduepool.com',
       height: 1080,
       width: 1920,
     })
