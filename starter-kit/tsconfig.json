@@ -52,6 +52,7 @@
     "./examples/**/*",
     "./declarations/declarations.d.ts",
     "./utils/**/*",
+    "./utils2/**/*",
     "./styles/**/*",
     "./node_modules/@types/**/*",
     "./sdk/**/*"

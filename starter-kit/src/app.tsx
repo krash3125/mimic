@@ -11,6 +11,7 @@ import { addNativeElement, getCurrentPageContext } from '@canva/design';
 import { auth } from '@canva/user';
 import React, { useState } from 'react';
 import styles from 'styles/components.css';
+import { addBox, delay } from 'utils/elements';
 
 // const BACKEND_URL = `${BACKEND_HOST}`;
 const BACKEND_URL = `http://localhost:5000`;
@@ -18,7 +19,7 @@ const BACKEND_URL = `http://localhost:5000`;
 type State = 'idle' | 'loading' | 'success' | 'error';
 
 export const App = () => {
-  const [input, setInput] = useState('https://amazon.com');
+  const [input, setInput] = useState('https://purduepool.com');
   const [state, setState] = useState<State>('idle');
   const [responseBody, setResponseBody] = useState<unknown | undefined>(
     undefined
@@ -98,34 +99,24 @@ export const App = () => {
       setResponseBody(body);
 
       for (const div of body) {
-        const top = div?.y;
-        const left = div?.x;
-        const width = div?.width;
-        const height = div?.height;
-        const bg = div?.bg;
-
-        addNativeElement({
-          type: 'SHAPE',
-
-          paths: [
-            {
-              d: getBoxPath({ top, left, height, width }),
-              fill: {
-                color: bg,
-              },
-            },
-          ],
-
-          viewBox: {
-            height: height,
-            width: width,
-            top: top,
-            left: left,
-          },
-          height: height,
-          width: width,
-          top: top,
-          left: left,
+        addBox({
+          bg: div?.bg,
+          height: div?.height,
+          left: div?.x,
+          top: div?.y,
+          width: div?.width,
+          borderRadiusTopLeft: parseInt(
+            div?.borderTopLeftRadius?.replace('px', '')
+          ),
+          borderRadiusTopRight: parseInt(
+            div?.borderTopRightRadius?.replace('px', '')
+          ),
+          borderRadiusBottomLeft: parseInt(
+            div?.borderBottomLeftRadius?.replace('px', '')
+          ),
+          borderRadiusBottomRight: parseInt(
+            div?.borderBottomRightRadius?.replace('px', '')
+          ),
         });
       }
 
@@ -148,6 +139,7 @@ export const App = () => {
           This example demonstrates how apps can securely communicate with their
           servers via the browser's Fetch API.
         </Text>
+
         {/* Idle and loading state */}
         {state !== 'error' && (
           <>
@@ -192,20 +184,4 @@ export const App = () => {
       </Rows>
     </div>
   );
-};
-
-const getBoxPath = ({
-  left = 0,
-  top = 0,
-  width = 100,
-  height = 100,
-}: {
-  left?: number;
-  top?: number;
-  width?: number;
-  height?: number;
-}) => {
-  return `M ${left} ${top} H ${left + width} V ${
-    top + height
-  } H ${left} L ${left} ${top}`;
 };

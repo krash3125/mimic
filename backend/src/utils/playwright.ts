@@ -53,7 +53,7 @@ export const getDivs = async ({
 
   await page.goto(url);
 
-  const divs = await page.$$('div, section, main, nav');
+  const divs = await page.$$('div, section, main, nav, button, a, body, html');
   let lst: any[] = [];
 
   for (const div of divs) {
@@ -74,6 +74,10 @@ export const getDivs = async ({
         ...box,
         bg: bg.hex,
         alpha: bg.alpha,
+        borderTopLeftRadius: computed.borderTopLeftRadius,
+        borderTopRightRadius: computed.borderTopRightRadius,
+        borderBottomLeftRadius: computed.borderBottomLeftRadius,
+        borderBottomRightRadius: computed.borderBottomRightRadius,
         borderRadius: computed.borderRadius,
       };
 
