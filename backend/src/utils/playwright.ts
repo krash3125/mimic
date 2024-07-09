@@ -106,7 +106,6 @@ export const getDivs = async ({
         ...data,
         bg: bg.hex,
         alpha: bg.alpha,
-        borderRadius: computed.borderRadius,
       });
     }
   }
