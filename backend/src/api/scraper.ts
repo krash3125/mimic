@@ -30,7 +30,18 @@ router.get('/color', async (req, res) => {
 });
 
 router.get('/text', async (req, res) => {
-  res.json(await getTexts());
+  res.json(
+    await getTexts({
+      url: 'https://www.purduepool.com',
+      height: 1080,
+      width: 1920,
+    })
+  );
+});
+
+router.post('/text', async (req, res) => {
+  const { height, width, url } = req.body;
+  res.json(await getTexts({ height, width, url }));
 });
 
 export default router;

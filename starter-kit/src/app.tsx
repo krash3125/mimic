@@ -36,7 +36,7 @@ export const App = () => {
       }
 
       const { height, width } = page.dimensions;
-      const res = await fetch(`${BACKEND_URL}/api/v1/scrape/divs`, {
+      const res = await fetch(`${BACKEND_URL}/api/v1/scrape/text`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -52,17 +52,37 @@ export const App = () => {
       setResponseBody(body);
 
       for (const div of body) {
-        const top = div?.y;
-        const left = div?.x;
-        const width = div?.width;
+        let top, left, width;
+        if (div?.textAlign === 'center' || div?.fontSize > 18 || true) {
+          const factor = 0.112;
+          const extra = div?.width * factor;
+          const y_shift = (div?.height - div?.fontSize) / 2.6;
+          top = div?.y + y_shift;
+          // top = div?.y;
+          left = div?.x - extra / 2;
+          width = div?.width * (1 + factor);
+        } else {
+          top = div?.y;
+          left = div?.x;
+          width = div?.width;
+        }
 
-        addNativeElement({
-          type: 'TEXT',
-          children: ['Hi'],
-          width: width,
-          top: top,
-          left: left,
-        });
+        if (['start', 'center', 'end', 'justify'].includes(div?.textAlign)) {
+          addNativeElement({
+            type: 'TEXT',
+            children: [div?.text],
+            width: width,
+            top: top,
+            left: left,
+            color: div?.fontColor,
+            fontSize: div?.fontSize,
+            fontWeight: div?.fontWeight,
+            textAlign: div?.textAlign,
+            // fontStyle: div?.fontStyle,
+            // decoration: div?.textDecoration,
+            // fontFamily: div?.fontFamily,
+          });
+        }
       }
 
       setState('success');
@@ -149,7 +169,30 @@ export const App = () => {
               loading={state === 'loading'}
               stretch
             >
-              Send GET request
+              Get Boxes
+            </Button>
+            {state === 'success' && responseBody && (
+              <FormField
+                label="Response"
+                value={JSON.stringify(responseBody, null, 2)}
+                control={(props) => (
+                  <MultilineInput {...props} maxRows={5} autoGrow readOnly />
+                )}
+              />
+            )}
+          </>
+        )}
+
+        {/* Idle and loading state */}
+        {state !== 'error' && (
+          <>
+            <Button
+              variant="primary"
+              onClick={sendRequest2}
+              loading={state === 'loading'}
+              stretch
+            >
+              Get Texts
             </Button>
             {state === 'success' && responseBody && (
               <FormField

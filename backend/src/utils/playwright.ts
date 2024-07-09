@@ -115,21 +115,30 @@ export const getDivs = async ({
 };
 
 // http://localhost:5000/api/v1/scrape/text
-export const getTexts = async () => {
-  const browser = await chromium.launch({ headless: true });
+export const getTexts = async ({
+  height,
+  width,
+  url,
+  headless = true,
+}: {
+  height: number;
+  width: number;
+  url: string;
+  headless?: boolean;
+}) => {
+  const browser = await chromium.launch({ headless });
   const page = await browser.newPage();
-
-  const height = 1920;
-  const width = 1080;
 
   await page.setViewportSize({
     height: height,
     width: width,
   });
 
-  await page.goto('https://purduepool.com');
+  await page.goto(url);
 
-  const texts = await page.$$('h1, h2, h3, h4, h5, h6, p, a');
+  const texts = await page.$$(
+    'div, h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, button'
+  );
 
   let lst: any[] = [];
 
@@ -151,10 +160,53 @@ export const getTexts = async () => {
       continue;
     }
 
-    lst.push({ ...boundingBox });
+    const innerText = await text.innerText();
+    const el = await text.innerHTML();
+
+    computed.fontSize;
+
+    if (innerText && innerText === el) {
+      lst.push({
+        ...boundingBox,
+        text: innerText,
+        fontSize: parseInt(computed.fontSize.replace('px', '')),
+        fontWeight: convertWeightToText(computed.fontWeight),
+        fontFamily: computed.fontFamily,
+        fontStyle: computed.fontStyle,
+        textAlign: computed.textAlign,
+        fontColor: colorToHex(computed.color).hex,
+        textDecoration: computed.textDecoration,
+      });
+    }
   }
 
   await browser.close();
 
   return lst;
+};
+
+const convertWeightToText = (weight: string) => {
+  const w = parseInt(weight);
+  switch (w) {
+    case 100:
+      return 'thin';
+    case 200:
+      return 'extralight';
+    case 300:
+      return 'light';
+    case 400:
+      return 'normal';
+    case 500:
+      return 'medium';
+    case 600:
+      return 'semibold';
+    case 700:
+      return 'bold';
+    case 800:
+      return 'ultrabold';
+    case 900:
+      return 'heavy';
+    default:
+      return 'normal';
+  }
 };
