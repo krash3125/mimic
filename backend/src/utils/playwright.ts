@@ -78,7 +78,8 @@ export const getDivs = async ({
         borderTopRightRadius: computed.borderTopRightRadius,
         borderBottomLeftRadius: computed.borderBottomLeftRadius,
         borderBottomRightRadius: computed.borderBottomRightRadius,
-        borderRadius: computed.borderRadius,
+        borderWidth: computed.borderWidth,
+        borderColor: computed.borderColor,
       };
 
       if (
