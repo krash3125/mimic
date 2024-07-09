@@ -53,7 +53,7 @@ export const getDivs = async ({
 
   await page.goto(url);
 
-  const divs = await page.$$('div, section, main, nav, button, a, body, html');
+  const divs = await page.$$('div, section, main, nav');
   let lst: any[] = [];
 
   for (const div of divs) {
@@ -74,10 +74,6 @@ export const getDivs = async ({
         ...box,
         bg: bg.hex,
         alpha: bg.alpha,
-        borderTopLeftRadius: computed.borderTopLeftRadius,
-        borderTopRightRadius: computed.borderTopRightRadius,
-        borderBottomLeftRadius: computed.borderBottomLeftRadius,
-        borderBottomRightRadius: computed.borderBottomRightRadius,
         borderRadius: computed.borderRadius,
       };
 
@@ -115,30 +111,21 @@ export const getDivs = async ({
 };
 
 // http://localhost:5000/api/v1/scrape/text
-export const getTexts = async ({
-  height,
-  width,
-  url,
-  headless = true,
-}: {
-  height: number;
-  width: number;
-  url: string;
-  headless?: boolean;
-}) => {
-  const browser = await chromium.launch({ headless });
+export const getTexts = async () => {
+  const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+
+  const height = 1920;
+  const width = 1080;
 
   await page.setViewportSize({
     height: height,
     width: width,
   });
 
-  await page.goto(url);
+  await page.goto('https://purduepool.com');
 
-  const texts = await page.$$(
-    'div, h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, button'
-  );
+  const texts = await page.$$('h1, h2, h3, h4, h5, h6, p, a');
 
   let lst: any[] = [];
 
@@ -146,8 +133,18 @@ export const getTexts = async ({
     if (!(await text.isVisible())) {
       continue;
     }
+    
+    const textContent = await text.evaluate((el) => el.textContent);
+    const computed = await text.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        color: style.color,
+        fontStyle: style.fontStyle,
+        fontWeight: style.fontWeight,
+        fontSize: style.fontSize,
+      };
+    });
 
-    const computed = await text.evaluate((el) => window.getComputedStyle(el));
     const boundingBox = await text.boundingBox();
 
     if (
@@ -160,53 +157,17 @@ export const getTexts = async ({
       continue;
     }
 
-    const innerText = await text.innerText();
-    const el = await text.innerHTML();
-
-    computed.fontSize;
-
-    if (innerText && innerText === el) {
-      lst.push({
-        ...boundingBox,
-        text: innerText,
-        fontSize: parseInt(computed.fontSize.replace('px', '')),
-        fontWeight: convertWeightToText(computed.fontWeight),
-        fontFamily: computed.fontFamily,
-        fontStyle: computed.fontStyle,
-        textAlign: computed.textAlign,
-        fontColor: colorToHex(computed.color).hex,
-        textDecoration: computed.textDecoration,
-      });
-    }
+    lst.push({
+      text: textContent,
+      boundingBox: boundingBox,
+      color: computed.color,
+      fontStyle: computed.fontStyle,
+      fontWeight: computed.fontWeight,
+      fontSize: computed.fontSize,
+    });
   }
 
   await browser.close();
 
   return lst;
-};
-
-const convertWeightToText = (weight: string) => {
-  const w = parseInt(weight);
-  switch (w) {
-    case 100:
-      return 'thin';
-    case 200:
-      return 'extralight';
-    case 300:
-      return 'light';
-    case 400:
-      return 'normal';
-    case 500:
-      return 'medium';
-    case 600:
-      return 'semibold';
-    case 700:
-      return 'bold';
-    case 800:
-      return 'ultrabold';
-    case 900:
-      return 'heavy';
-    default:
-      return 'normal';
-  }
 };
