@@ -1,4 +1,4 @@
-import { Page, chromium, firefox, webkit } from 'playwright';
+import { ElementHandle, Page, chromium, firefox, webkit } from 'playwright';
 import rgb2hex from 'rgb2hex';
 import { colorToHex } from './color';
 
@@ -64,9 +64,13 @@ export const getDivs = async ({
         continue;
       }
 
-      const computed = await div.evaluate((el) => {
-        return window.getComputedStyle(el);
-      });
+      const styles = await getStyles(div);
+
+      if (!styles.visible) {
+        continue;
+      }
+
+      const computed = styles.style;
 
       const bg = colorToHex(computed.backgroundColor);
 
@@ -147,8 +151,19 @@ export const getTexts = async ({
       continue;
     }
 
-    const computed = await text.evaluate((el) => window.getComputedStyle(el));
     const boundingBox = await text.boundingBox();
+
+    if (!boundingBox) {
+      continue;
+    }
+
+    const styles = await getStyles(text);
+
+    if (!styles.visible) {
+      continue;
+    }
+
+    const computed = styles.style;
 
     if (
       !boundingBox ||
@@ -209,4 +224,51 @@ const convertWeightToText = (weight: string) => {
     default:
       return 'normal';
   }
+};
+
+const getStyles = async (el: ElementHandle<SVGElement | HTMLElement>) => {
+  return await el.evaluate((elem) => {
+    const style = getComputedStyle(elem);
+    const isVisible = () => {
+      if (elem instanceof SVGElement) return true;
+      if (style.display === 'none') return false;
+      if (style.visibility !== 'visible') return false;
+      if (parseFloat(style.opacity) < 0.1) return false;
+      if (
+        elem.offsetWidth +
+          elem.offsetHeight +
+          elem.getBoundingClientRect().height +
+          elem.getBoundingClientRect().width ===
+        0
+      ) {
+        return false;
+      }
+      const elemCenter = {
+        x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
+        y: elem.getBoundingClientRect().top + elem.offsetHeight / 2,
+      };
+      if (elemCenter.x < 0) return false;
+      if (
+        elemCenter.x >
+        (document.documentElement.clientWidth || window.innerWidth)
+      )
+        return false;
+      if (elemCenter.y < 0) return false;
+      if (
+        elemCenter.y >
+        (document.documentElement.clientHeight || window.innerHeight)
+      )
+        return false;
+      let pointContainer = document.elementFromPoint(
+        elemCenter.x,
+        elemCenter.y
+      );
+      do {
+        if (pointContainer === elem) return true;
+      } while ((pointContainer = pointContainer?.parentNode as Element));
+      return false;
+    };
+
+    return { style, visible: isVisible() };
+  });
 };

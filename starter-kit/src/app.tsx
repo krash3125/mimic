@@ -12,6 +12,7 @@ import { auth } from '@canva/user';
 import React, { useState } from 'react';
 import styles from 'styles/components.css';
 import { addBox, delay } from 'utils/elements';
+import { findFonts } from '@canva/asset';
 
 // const BACKEND_URL = `${BACKEND_HOST}`;
 const BACKEND_URL = `http://localhost:5000`;
@@ -24,6 +25,12 @@ export const App = () => {
   const [responseBody, setResponseBody] = useState<unknown | undefined>(
     undefined
   );
+
+  const printFont = async () => {
+    const fonts = await findFonts();
+
+    console.log(fonts);
+  };
 
   const sendRequest2 = async () => {
     try {
@@ -51,21 +58,16 @@ export const App = () => {
       const body = await res.json();
       setResponseBody(body);
 
+      const conversionFactor = 0.9;
+
       for (const div of body) {
-        let top, left, width;
-        if (div?.textAlign === 'center' || div?.fontSize > 18 || true) {
-          const factor = 0.112;
-          const extra = div?.width * factor;
-          const y_shift = (div?.height - div?.fontSize) / 2.6;
-          top = div?.y + y_shift;
-          // top = div?.y;
-          left = div?.x - extra / 2;
-          width = div?.width * (1 + factor);
-        } else {
-          top = div?.y;
-          left = div?.x;
-          width = div?.width;
-        }
+        const textHeight = div?.fontSize * conversionFactor;
+        const containerHeight = div?.height;
+        const y_shift = (containerHeight - textHeight) / 2;
+
+        const top = div?.y + y_shift;
+        const left = div?.x;
+        const width = div?.width;
 
         if (['start', 'center', 'end', 'justify'].includes(div?.textAlign)) {
           addNativeElement({
@@ -75,12 +77,11 @@ export const App = () => {
             top: top,
             left: left,
             color: div?.fontColor,
-            fontSize: div?.fontSize,
+            fontSize: textHeight,
             fontWeight: div?.fontWeight,
             textAlign: div?.textAlign,
-            // fontStyle: div?.fontStyle,
-            // decoration: div?.textDecoration,
-            // fontFamily: div?.fontFamily,
+            //@ts-ignore
+            fontRef: 'YAFcfoaHu-s:0',
           });
         }
       }
@@ -159,6 +160,10 @@ export const App = () => {
           This example demonstrates how apps can securely communicate with their
           servers via the browser's Fetch API.
         </Text>
+
+        <Button variant="primary" onClick={printFont} stretch>
+          Print Fonts
+        </Button>
 
         {/* Idle and loading state */}
         {state !== 'error' && (
