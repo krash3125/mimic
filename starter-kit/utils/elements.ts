@@ -1,4 +1,9 @@
-import { addNativeElement, getCurrentPageContext } from '@canva/design';
+import {
+  addNativeElement,
+  getCurrentPageContext,
+  NativeElement,
+  NativeElementWithBox,
+} from '@canva/design';
 
 export const addBox = ({
   left,
@@ -106,18 +111,7 @@ export const getBoxPath = ({
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-// const getBoxPath = ({
-//   left = 0,
-//   top = 0,
-//   width = 100,
-//   height = 100,
-// }: {
-//   left?: number;
-//   top?: number;
-//   width?: number;
-//   height?: number;
-// }) => {
-//   return `M ${left} ${top} H ${left + width} V ${
-//     top + height
-//   } H ${left} L ${left} ${top}`;
-// };
+export type Element = NativeElement | NativeElementWithBox;
+
+// TODO: MIHIR
+export const delayAddElements = async (elements: Element[]) => {};

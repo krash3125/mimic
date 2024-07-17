@@ -1,11 +1,25 @@
 import express from 'express';
 import rgb2hex from 'rgb2hex';
-import { chromium, firefox, webkit } from 'playwright';
-import { getDivs, getPage, getTexts } from '../utils/playwright';
+import { Browser, chromium, firefox, Page, webkit } from 'playwright';
+import { getDivs, getDivs2, getPage, getTexts } from '../utils/playwright';
 import Color from 'colorjs.io';
 import { colorToHex } from '../utils/color';
 
 const router = express.Router();
+
+router.get('/all', async (req, res) => {
+  const height = 1080;
+  const width = 1920;
+  const url = 'https://www.purduepool.com';
+
+  const [page, browser] = await getPage({
+    height,
+    width,
+    url,
+  });
+
+  const divs = await getDivs2({ page, height, width, url });
+});
 
 router.get('/divs', async (req, res) => {
   res.json(

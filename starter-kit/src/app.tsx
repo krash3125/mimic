@@ -11,7 +11,7 @@ import { addNativeElement, getCurrentPageContext } from '@canva/design';
 import { auth } from '@canva/user';
 import React, { useState } from 'react';
 import styles from 'styles/components.css';
-import { addBox, delay } from 'utils/elements';
+import { addBox, delay, delayAddElements, Element } from 'utils/elements';
 import { findFonts } from '@canva/asset';
 
 // const BACKEND_URL = `${BACKEND_HOST}`;
@@ -58,9 +58,14 @@ export const App = () => {
       const body = await res.json();
       setResponseBody(body);
 
+      // let counter = 0;
       const conversionFactor = 0.9;
 
       for (const div of body) {
+        // if (counter % 20 === 0 && counter !== 0) {
+        //   await delay(10000);
+        // }
+        // counter++;
         const textHeight = div?.fontSize * conversionFactor;
         const containerHeight = div?.height;
         const y_shift = (containerHeight - textHeight) / 2;
