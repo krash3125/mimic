@@ -114,4 +114,19 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export type Element = NativeElement | NativeElementWithBox;
 
 // TODO: MIHIR
-export const delayAddElements = async (elements: Element[]) => {};
+export const delayAddElements = async (elements: Element[]) => {
+  const BATCH_SIZE = 20;
+  const DELAY_MS = 10000;
+
+  for (let i = 0; i < elements.length; i += BATCH_SIZE) {
+    const batch = elements.slice(i, i + BATCH_SIZE);
+
+    batch.forEach((element) => {
+      addNativeElement(element);
+    });
+
+    if (i + BATCH_SIZE < elements.length) {
+      await delay(DELAY_MS);
+    }
+  }
+};
