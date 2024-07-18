@@ -7,6 +7,52 @@ import { colorToHex } from '../utils/color';
 
 const router = express.Router();
 
+router.get('/progressive-data', async (req, res) => {
+ 
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+
+  const sendData = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  const height = 1080;
+  const width = 1920;
+  const url = 'https://www.purduepool.com';
+
+  try {
+    // Open the page
+    const [page, browser] = await getPage({
+      height,
+      width,
+      url,
+    });
+
+
+    const divs = await getDivs({ page, height, width, url });
+    sendData({ divs });
+
+ 
+    const texts = await getTexts({ page, height, width, url });
+    sendData({ texts });
+
+    // Close the browser
+    await browser.close();
+
+    res.write('event: end\n');
+    res.write('data: {}\n\n');
+    res.end();
+  } catch (error) {
+    // Handle errors
+    res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
+    res.end();
+  }
+});
+
+
 router.get('/all', async (req, res) => {
   const height = 1080;
   const width = 1920;
