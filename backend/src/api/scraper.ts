@@ -15,7 +15,7 @@ router.get('/progressive-data', async (req, res) => {
   res.flushHeaders();
 
 
-  const sendData = (data) => {
+  const sendData = (data: string) => {
     res.write(`data: ${JSON.stringify(data)}\n\n`);
   };
 
