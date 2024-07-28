@@ -1,3 +1,12 @@
+.boxSizeSm {
+  height: 60px;
+  width: 60px;
+}
+
+.heightSm {
+  height: 60px;
+}
+
 /* Scroll container */
 .scrollContainer {
   box-sizing: border-box;
