@@ -1,12 +1,4 @@
-import {
-  Browser,
-  ElementHandle,
-  Page,
-  chromium,
-  firefox,
-  webkit,
-} from 'playwright';
-import rgb2hex from 'rgb2hex';
+import { Page } from 'playwright';
 import { colorToHex } from '../color';
 import { convertWeightToText, getStyles, pxToInt } from './base';
 
@@ -147,8 +139,9 @@ export const getTexts2 = async ({
       bb.x < 0 ||
       bb.y < 0 ||
       bb.x > width ||
-      bb.y > height
-
+      bb.y > height ||
+      bb.y + bb.height > height ||
+      bb.x + bb.width > width
       // || bb.width === 0 ||
       // bb.height === 0
     ) {

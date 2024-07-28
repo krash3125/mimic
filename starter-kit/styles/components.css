@@ -7,6 +7,10 @@
   height: 60px;
 }
 
+.mt_auto {
+  margin-top: auto;
+}
+
 /* Scroll container */
 .scrollContainer {
   box-sizing: border-box;

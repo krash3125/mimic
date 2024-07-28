@@ -1,9 +1,5 @@
-import {
-  getCurrentPageContext,
-  PageContext,
-  PageDimensions,
-} from '@canva/design';
-import { addBox, Element } from './elements';
+import { PageContext } from '@canva/design';
+import { addBox, Element, getBoxJson } from './elements';
 
 const BACKEND_URL = `http://localhost:5000`;
 
@@ -28,17 +24,19 @@ export const fetchBoxes = async (url: string, pageContext: PageContext) => {
   let elements: Element[] = [];
 
   for (const box of data) {
-    addBox({
-      bg: box?.bg,
-      height: box?.height,
-      left: box?.x,
-      top: box?.y,
-      width: box?.width,
-      borderRadiusTopLeft: box?.borderTopLeftRadius,
-      borderRadiusTopRight: box?.borderTopRightRadius,
-      borderRadiusBottomLeft: box?.borderBottomLeftRadius,
-      borderRadiusBottomRight: box?.borderBottomRightRadius,
-    });
+    elements.push(
+      getBoxJson({
+        bg: box?.bg,
+        height: box?.height,
+        left: box?.x,
+        top: box?.y,
+        width: box?.width,
+        borderRadiusTopLeft: box?.borderTopLeftRadius,
+        borderRadiusTopRight: box?.borderTopRightRadius,
+        borderRadiusBottomLeft: box?.borderBottomLeftRadius,
+        borderRadiusBottomRight: box?.borderBottomRightRadius,
+      })
+    );
   }
 
   return elements;
@@ -48,7 +46,7 @@ export const fetchTexts = async (url: string, pageContext: PageContext) => {
   if (!pageContext.dimensions) throw new Error('No dimensions found');
   const { height, width } = pageContext.dimensions;
 
-  const res = await fetch(`${BACKEND_URL}/api/v1/scrape/texts2`, {
+  const res = await fetch(`${BACKEND_URL}/api/v1/scrape/texts`, {
     headers: {
       'Content-Type': 'application/json',
     },

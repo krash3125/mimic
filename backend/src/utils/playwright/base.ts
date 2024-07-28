@@ -1,13 +1,4 @@
-import {
-  Browser,
-  ElementHandle,
-  Page,
-  chromium,
-  firefox,
-  webkit,
-} from 'playwright';
-import rgb2hex from 'rgb2hex';
-import { colorToHex } from '../color';
+import { Browser, ElementHandle, Page, chromium } from 'playwright';
 
 type GetPageType = [Page, Browser];
 
