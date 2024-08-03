@@ -5,6 +5,68 @@ import {
   NativeElementWithBox,
 } from '@canva/design';
 
+export const getBoxJson = ({
+  left,
+  top,
+  width,
+  height,
+  bg,
+  borderRadiusBottomLeft,
+  borderRadiusBottomRight,
+  borderRadiusTopLeft,
+  borderRadiusTopRight,
+  borderColor,
+  borderWidth,
+}: {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  bg: string;
+  borderRadiusBottomLeft: number;
+  borderRadiusBottomRight: number;
+  borderRadiusTopLeft: number;
+  borderRadiusTopRight: number;
+  borderColor: string;
+  borderWidth: number;
+}): Element => {
+  return {
+    type: 'SHAPE',
+    paths: [
+      {
+        d: getBoxPath({
+          left,
+          top,
+          width,
+          height,
+          borderRadiusBottomLeft,
+          borderRadiusBottomRight,
+          borderRadiusTopLeft,
+          borderRadiusTopRight,
+        }),
+        fill: {
+          color: bg === 'transparent' ? undefined : bg,
+        },
+        stroke: {
+          weight: borderWidth,
+          color: borderColor,
+          strokeAlign: 'inset',
+        },
+      },
+    ],
+    viewBox: {
+      height: height,
+      width: width,
+      top: top,
+      left: left,
+    },
+    height: height,
+    width: width,
+    top: top,
+    left: left,
+  };
+};
+
 export const addBox = ({
   left,
   top,
@@ -113,9 +175,8 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export type Element = NativeElement | NativeElementWithBox;
 
-// TODO: MIHIR
 export const delayAddElements = async (elements: Element[]) => {
-  const BATCH_SIZE = 20;
+  const BATCH_SIZE = 31;
   const DELAY_MS = 10000;
 
   for (let i = 0; i < elements.length; i += BATCH_SIZE) {

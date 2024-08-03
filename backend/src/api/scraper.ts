@@ -1,107 +1,36 @@
 import express from 'express';
-import rgb2hex from 'rgb2hex';
-import { Browser, chromium, firefox, Page, webkit } from 'playwright';
-import { getDivs, getDivs2, getPage, getTexts } from '../utils/playwright';
-import Color from 'colorjs.io';
-import { colorToHex } from '../utils/color';
+import { getPlaywright } from '../utils/playwright/base';
+import { getBoxes, getTexts } from '../utils/playwright/elements';
+import { catchErrors } from '../middlewares';
 
 const router = express.Router();
 
-router.get('/progressive-data', async (req, res) => {
- 
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  res.flushHeaders();
+router.post(
+  '/',
+  catchErrors(async (req, res) => {
+    const { height, width, url } = req.body;
 
+    const includeBoxes = (req.query.includeBoxes + '').toLowerCase() === 'true';
+    const includeTexts = (req.query.includeTexts + '').toLowerCase() === 'true';
 
-  const sendData = (data: string) => {
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
-  };
+    let data: any = {};
 
-  const height = 1080;
-  const width = 1920;
-  const url = 'https://www.purduepool.com';
+    const [page, browser] = await getPlaywright({ height, width, url });
 
-  try {
-    // Open the page
-    const [page, browser] = await getPage({
-      height,
-      width,
-      url,
-    });
+    if (includeBoxes) {
+      const boxes = await getBoxes({ page, height, width });
+      data = { boxes };
+    }
 
+    if (includeTexts) {
+      const texts = await getTexts({ page, height, width });
+      data = { ...data, texts };
+    }
 
-    const divs = await getDivs({ page, height, width, url });
-    sendData({ divs });
+    res.json(data);
 
- 
-    const texts = await getTexts({ page, height, width, url });
-    sendData({ texts });
-
-    // Close the browser
     await browser.close();
-
-    res.write('event: end\n');
-    res.write('data: {}\n\n');
-    res.end();
-  } catch (error) {
-    // Handle errors
-    res.write(`data: ${JSON.stringify({ error: error.message })}\n\n`);
-    res.end();
-  }
-});
-
-
-router.get('/all', async (req, res) => {
-  const height = 1080;
-  const width = 1920;
-  const url = 'https://www.purduepool.com';
-
-  const [page, browser] = await getPage({
-    height,
-    width,
-    url,
-  });
-
-  const divs = await getDivs2({ page, height, width, url });
-});
-
-router.get('/divs', async (req, res) => {
-  res.json(
-    await getDivs({
-      url: 'https://www.purduepool.com',
-      height: 1080,
-      width: 1920,
-    })
-  );
-});
-
-router.post('/divs', async (req, res) => {
-  const { height, width, url } = req.body;
-  res.json(await getDivs({ height, width, url }));
-});
-
-router.get('/color', async (req, res) => {
-  res.json({
-    c1: colorToHex('oklch(0.133892 0.011427 219.055)'),
-    c2: colorToHex('oklch(0.794488 0.059203 82.3535 / 0.8)'),
-  });
-});
-
-router.get('/text', async (req, res) => {
-  res.json(
-    await getTexts({
-      url: 'https://www.purduepool.com',
-      height: 1080,
-      width: 1920,
-    })
-  );
-});
-
-router.post('/text', async (req, res) => {
-  const { height, width, url } = req.body;
-  res.json(await getTexts({ height, width, url }));
-});
+  })
+);
 
 export default router;

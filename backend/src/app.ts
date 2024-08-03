@@ -11,8 +11,8 @@ require('dotenv').config();
 
 const app = express();
 
-// app.use(morgan('dev'));
-// app.use(helmet());
+app.use(morgan('dev'));
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.disable('x-powered-by');
@@ -21,12 +21,6 @@ app.disable('x-powered-by');
 app.get('/healthz', (req, res) => {
   res.sendStatus(200);
 });
-
-// // logging middleware
-// app.use((req, res, next) => {
-//   serverDebug(`${new Date().toISOString()}: ${req.method} ${req.url}`);
-//   next();
-// });
 
 app.get<{}, MessageResponse>('/', (req, res) => {
   res.json({
