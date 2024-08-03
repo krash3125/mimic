@@ -121,7 +121,7 @@ export const getBoxes = async ({
 
 const TEXT_CONVERSION_FACTOR = 0.9;
 
-export const getTexts2 = async ({
+export const getTexts = async ({
   page,
   height,
   width,

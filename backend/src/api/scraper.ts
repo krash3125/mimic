@@ -1,8 +1,6 @@
 import express from 'express';
-import { getDivs, getImgs, getTexts } from '../utils/playwright';
-import { colorToHex } from '../utils/color';
 import { getPlaywright } from '../utils/playwright/base';
-import { getBoxes, getTexts2 } from '../utils/playwright/elements';
+import { getBoxes, getTexts } from '../utils/playwright/elements';
 import { catchErrors } from '../middlewares';
 
 const router = express.Router();
@@ -25,7 +23,7 @@ router.post(
     }
 
     if (includeTexts) {
-      const texts = await getTexts2({ page, height, width });
+      const texts = await getTexts({ page, height, width });
       data = { ...data, texts };
     }
 
