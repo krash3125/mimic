@@ -1,9 +1,14 @@
-const regex = new RegExp(
-  '[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)'
-);
+const UNSUPPORTED_URLS = ['x.com', 'twitter.com', 'reddit.com'];
 
-const isValidUrl = (url: string) => {
-  return regex.test(url);
+export const checkIfSuported = (url: string) => {
+  url = url.toLowerCase();
+
+  for (const link of UNSUPPORTED_URLS) {
+    if (url.includes(link)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 export const generalizeURL = (url: string) => {

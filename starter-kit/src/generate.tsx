@@ -22,7 +22,7 @@ import { addBox, delay, delayAddElements, Element } from 'utils/elements';
 import { findFonts } from '@canva/asset';
 import Explore from './explore';
 import { fetchBoxes, fetchTexts, scrapeAll } from 'utils/fetch';
-import { generalizeURL } from 'utils/url';
+import { checkIfSuported, generalizeURL } from 'utils/url';
 
 type State = 'idle' | 'loading' | 'success' | 'error';
 
@@ -34,6 +34,8 @@ const Generate = ({
   setInput: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [state, setState] = useState<State>('idle');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const [includeDivs, setIncludeDivs] = useState(true);
   const [includeTexts, setIncludeTexts] = useState(true);
 
@@ -42,6 +44,14 @@ const Generate = ({
       setState('loading');
       const generalizedUrl = generalizeURL(input);
       setInput(generalizedUrl);
+
+      const valid = checkIfSuported(generalizedUrl);
+
+      if (!valid) {
+        setErrorMsg('Unsupported URL');
+        setState('error');
+        return;
+      }
 
       const page = await getCurrentPageContext();
 
@@ -58,6 +68,7 @@ const Generate = ({
       setState('success');
     } catch (error) {
       setState('error');
+      setErrorMsg('An error occurred');
       console.error(error);
     }
   };
@@ -73,6 +84,7 @@ const Generate = ({
             onChange={(e) => setInput(e)}
             disabled={state === 'loading'}
           />
+          {state === 'error' && <Text tone="critical">{errorMsg}</Text>}
         </Rows>
 
         <Rows spacing="1.5u">
