@@ -57,6 +57,8 @@ export const getBoxes = async ({
     const { hex, alpha } = colorToHex(backgroundColor);
     const { hex: borderHex, alpha: alphaHex } = colorToHex(borderColor);
 
+    // TODO: See if border color matches up an all 4 sides
+
     const newBorderWidth =
       alphaHex === 0
         ? 0
@@ -129,7 +131,7 @@ export const getTexts2 = async ({
   width: number;
 }) => {
   const texts = await page.$$(
-    'div, h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, button, strong, u, bold, input, select, legend'
+    'div, h1, h2, h3, h4, h5, h6, p, pre, span, a, li, td, th, label, button, strong, u, bold, input, select, legend'
   );
 
   let return_list: any[] = [];
@@ -137,7 +139,7 @@ export const getTexts2 = async ({
   for (const text of texts) {
     // Check if text is blank
     const innerText = await text.innerText();
-    if (!innerText) {
+    if (!innerText || innerText.trim() === '') {
       continue;
     }
 
@@ -153,10 +155,6 @@ export const getTexts2 = async ({
 
     if (!bb) {
       continue;
-    }
-
-    if (innerText === 'GRIND 75') {
-      console.log('here');
     }
 
     // Get advanced styles and check for visibility
@@ -177,10 +175,6 @@ export const getTexts2 = async ({
       // bb.height === 0
     ) {
       continue;
-    }
-
-    if (innerText === 'GRIND 75') {
-      console.log('here');
     }
 
     // HERE CHECK INNER TEXT AND PARENT INNER TEXT AND IF THEY ARE BOTH THE SAME THEN ADD TO LIST
@@ -207,20 +201,12 @@ export const getTexts2 = async ({
       continue;
     }
 
-    if (innerText === 'GRIND 75') {
-      console.log('here');
-    }
-
     const newTextAlign =
       (['start', 'center', 'end', 'justify'].includes(alignItems)
         ? alignItems
         : textAlign) ?? 'start';
 
-    const fontsizeNum = parseInt(fontSize.replace('px', ''));
-
-    if (innerText === 'GRIND 75') {
-      console.log('here');
-    }
+    const fontsizeNum = pxToInt(fontSize);
 
     // Calculate conversions for accurte sizing and positioning
     const newFontSize = fontsizeNum * TEXT_CONVERSION_FACTOR;
