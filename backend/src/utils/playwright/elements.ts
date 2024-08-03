@@ -12,7 +12,7 @@ export const getBoxes = async ({
   width: number;
 }) => {
   const boxes = await page.$$(
-    'div, section, main, nav, button, a, body, html, li, td, th, label'
+    'div, section, main, nav, button, a, body, html, li, td, th, label, img, span, input, select, h1, h2, h3, h4, h5, h6, p'
   );
 
   let return_list: any[] = [];
@@ -46,11 +46,26 @@ export const getBoxes = async ({
       borderBottomLeftRadius,
       borderBottomRightRadius,
       borderWidth,
+      borderLeftWidth,
+      borderRightWidth,
+      borderTopWidth,
+      borderBottomWidth,
       borderColor,
     } = style;
 
     // Parse color
     const { hex, alpha } = colorToHex(backgroundColor);
+    const { hex: borderHex, alpha: alphaHex } = colorToHex(borderColor);
+
+    const newBorderWidth =
+      alphaHex === 0
+        ? 0
+        : Math.max(
+            pxToInt(borderLeftWidth),
+            pxToInt(borderRightWidth),
+            pxToInt(borderTopWidth),
+            pxToInt(borderBottomWidth)
+          );
 
     // TODO: For divs i think it is removing background color elements that are over the height so we need to fix that amazon example id="pageContent"
 
@@ -63,14 +78,20 @@ export const getBoxes = async ({
       borderTopRightRadius: pxToInt(borderTopRightRadius),
       borderBottomLeftRadius: pxToInt(borderBottomLeftRadius),
       borderBottomRightRadius: pxToInt(borderBottomRightRadius),
-      borderWidth,
-      borderColor,
+      // borderWidth: pxToInt(borderWidth),
+      borderWidth: newBorderWidth,
+      borderColor: borderHex,
     };
 
     // Run fixes on elements
 
+    if (alpha === 0 && newBorderWidth === 0) {
+      continue;
+    } else if (alpha === 0) {
+      el_data.bg = 'transparent';
+    }
+
     if (
-      alpha === 0 ||
       bb.x < 0 ||
       bb.y < 0 ||
       bb.x > width ||
@@ -108,12 +129,18 @@ export const getTexts2 = async ({
   width: number;
 }) => {
   const texts = await page.$$(
-    'div, h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, button'
+    'div, h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, button, strong, u, bold, input, select, legend'
   );
 
   let return_list: any[] = [];
 
   for (const text of texts) {
+    // Check if text is blank
+    const innerText = await text.innerText();
+    if (!innerText) {
+      continue;
+    }
+
     // Root check for visibility
     const isVisibleRoot = await text.isVisible();
 
@@ -126,6 +153,10 @@ export const getTexts2 = async ({
 
     if (!bb) {
       continue;
+    }
+
+    if (innerText === 'GRIND 75') {
+      console.log('here');
     }
 
     // Get advanced styles and check for visibility
@@ -148,8 +179,18 @@ export const getTexts2 = async ({
       continue;
     }
 
-    const innerText = await text.innerText();
-    const el = await text.innerHTML();
+    if (innerText === 'GRIND 75') {
+      console.log('here');
+    }
+
+    // HERE CHECK INNER TEXT AND PARENT INNER TEXT AND IF THEY ARE BOTH THE SAME THEN ADD TO LIST
+
+    const el = (await text.innerHTML()).replaceAll(/<\!--.*?-->/g, '');
+
+    // console.log('-----------------------');
+    // console.log(innerText);
+    // console.log(el);
+    // console.log('-----------------------');
 
     const {
       fontSize,
@@ -159,13 +200,27 @@ export const getTexts2 = async ({
       textAlign,
       color,
       textDecoration,
+      alignItems,
     } = style;
 
     if (!['start', 'center', 'end', 'justify'].includes(textAlign)) {
       continue;
     }
 
+    if (innerText === 'GRIND 75') {
+      console.log('here');
+    }
+
+    const newTextAlign =
+      (['start', 'center', 'end', 'justify'].includes(alignItems)
+        ? alignItems
+        : textAlign) ?? 'start';
+
     const fontsizeNum = parseInt(fontSize.replace('px', ''));
+
+    if (innerText === 'GRIND 75') {
+      console.log('here');
+    }
 
     // Calculate conversions for accurte sizing and positioning
     const newFontSize = fontsizeNum * TEXT_CONVERSION_FACTOR;
@@ -173,7 +228,7 @@ export const getTexts2 = async ({
     const y_shift = (containerHeight - newFontSize) / 2;
     const top = bb.y + y_shift;
 
-    if (innerText && innerText === el) {
+    if (innerText && innerText.toLowerCase() === el.toLowerCase()) {
       return_list.push({
         x: bb.x,
         y: top,
@@ -183,7 +238,7 @@ export const getTexts2 = async ({
         fontWeight: convertWeightToText(fontWeight),
         fontFamily: fontFamily,
         fontStyle: fontStyle,
-        textAlign: textAlign,
+        textAlign: newTextAlign,
         fontColor: colorToHex(color).hex,
         textDecoration: textDecoration,
       });

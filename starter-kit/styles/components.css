@@ -3,6 +3,14 @@
   width: 60px;
 }
 
+.cursorPointer {
+  cursor: pointer;
+}
+
+.cursorDisabled {
+  cursor: not-allowed;
+}
+
 .heightSm {
   height: 60px;
 }

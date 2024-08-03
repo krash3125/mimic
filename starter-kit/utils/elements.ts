@@ -15,6 +15,8 @@ export const getBoxJson = ({
   borderRadiusBottomRight,
   borderRadiusTopLeft,
   borderRadiusTopRight,
+  borderColor,
+  borderWidth,
 }: {
   left: number;
   top: number;
@@ -25,6 +27,8 @@ export const getBoxJson = ({
   borderRadiusBottomRight: number;
   borderRadiusTopLeft: number;
   borderRadiusTopRight: number;
+  borderColor: string;
+  borderWidth: number;
 }): Element => {
   return {
     type: 'SHAPE',
@@ -41,7 +45,12 @@ export const getBoxJson = ({
           borderRadiusTopRight,
         }),
         fill: {
-          color: bg,
+          color: bg === 'transparent' ? undefined : bg,
+        },
+        stroke: {
+          weight: borderWidth,
+          color: borderColor,
+          strokeAlign: 'inset',
         },
       },
     ],

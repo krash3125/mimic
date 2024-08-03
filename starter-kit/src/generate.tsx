@@ -21,12 +21,18 @@ import styles from 'styles/components.css';
 import { addBox, delay, delayAddElements, Element } from 'utils/elements';
 import { findFonts } from '@canva/asset';
 import Explore from './explore';
-import { fetchBoxes, fetchTexts } from 'utils/fetch';
+import { fetchBoxes, fetchTexts, scrapeAll } from 'utils/fetch';
+import { generalizeURL } from 'utils/url';
 
 type State = 'idle' | 'loading' | 'success' | 'error';
 
-const Generate = () => {
-  const [input, setInput] = useState('https://purduepool.com');
+const Generate = ({
+  input,
+  setInput,
+}: {
+  input: string;
+  setInput: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const [state, setState] = useState<State>('idle');
   const [includeDivs, setIncludeDivs] = useState(true);
   const [includeTexts, setIncludeTexts] = useState(true);
@@ -34,20 +40,17 @@ const Generate = () => {
   const generate = async () => {
     try {
       setState('loading');
+      const generalizedUrl = generalizeURL(input);
+      setInput(generalizedUrl);
+
       const page = await getCurrentPageContext();
 
-      console.log('here', includeDivs, includeTexts);
-      let elements: Element[] = [];
+      let include = {
+        boxes: includeDivs,
+        texts: includeTexts,
+      };
 
-      if (includeDivs) {
-        const boxes = await fetchBoxes(input, page);
-        elements.push(...boxes);
-      }
-
-      if (includeTexts) {
-        const texts = await fetchTexts(input, page);
-        elements.push(...texts);
-      }
+      const elements = await scrapeAll(generalizedUrl, page, include);
 
       console.log(elements.length);
       await delayAddElements(elements);
