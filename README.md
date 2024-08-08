@@ -22,9 +22,8 @@ We are proud of successfully integrating web scraping with Playwright and conver
 
 1. Canva Apps SDK
 2. Playwright for Web Scraping
-3. Server Sent Events
-4. XYZ
-5. XYZ
+3. PX format conversions
+4. Cross-browser compatibility issues and solutions
 
 ## What's next for Mimic
 
