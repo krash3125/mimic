@@ -1,6 +1,11 @@
 import { Page } from 'playwright';
 import { colorToHex } from '../color';
-import { convertWeightToText, getStyles, pxToInt } from './base';
+import {
+  convertTextAlign,
+  convertWeightToText,
+  getStyles,
+  pxToInt,
+} from './base';
 
 export const getBoxes = async ({
   page,
@@ -18,6 +23,18 @@ export const getBoxes = async ({
   let return_list: any[] = [];
 
   for (const box of boxes) {
+    // Check if is image
+    const tag = await box.evaluate((element) => element.tagName.toLowerCase());
+
+    console.log(tag);
+    const isImage = await box.evaluate(
+      (element) => element.tagName.toLowerCase() === 'img'
+    );
+
+    if (isImage) {
+      console.log('IS IMAGE');
+    }
+
     // Root check for visibility
     const isVisibleRoot = await box.isVisible();
 
@@ -35,9 +52,33 @@ export const getBoxes = async ({
     // Get advanced styles and check for visibility
     const { style, visible } = await getStyles(box);
 
+    if (isImage) {
+      const parentBox = await box.evaluateHandle(
+        (element) => element.parentElement
+      );
+      const parentBB = await parentBox.asElement()?.boundingBox();
+      const tagName = await parentBox
+        .asElement()
+        ?.evaluate((element) => element.tagName.toLowerCase());
+
+      if (tagName === 'div') {
+        if (parentBB && bb.width > parentBB.width) {
+          bb.width = parentBB.width;
+          bb.x = parentBB.x;
+        }
+
+        if (parentBB && bb.height > parentBB.height) {
+          bb.height = parentBB.height;
+          bb.y = parentBB.y;
+        }
+      }
+    }
+
     if (!visible) {
       continue;
     }
+
+    console.log('reached here');
 
     const {
       backgroundColor,
@@ -53,8 +94,14 @@ export const getBoxes = async ({
     } = style;
 
     // Parse color
-    const { hex, alpha } = colorToHex(backgroundColor);
-    const { hex: borderHex, alpha: alphaHex } = colorToHex(borderColor);
+    let { hex, alpha } = colorToHex(backgroundColor);
+    let { hex: borderHex, alpha: alphaHex } = colorToHex(borderColor);
+
+    if (isImage) {
+      hex = 'img';
+      alpha = 1;
+      alphaHex = 0;
+    }
 
     // TODO: See if border color matches up an all 4 sides
 
@@ -110,6 +157,8 @@ export const getBoxes = async ({
     if (bb.height + bb.y > height) {
       el_data.height = height - bb.y;
     }
+
+    // SOME TESTING
 
     return_list.push(el_data);
   }
@@ -195,14 +244,7 @@ export const getTexts = async ({
       alignItems,
     } = style;
 
-    if (!['start', 'center', 'end', 'justify'].includes(textAlign)) {
-      continue;
-    }
-
-    const newTextAlign =
-      (['start', 'center', 'end', 'justify'].includes(alignItems)
-        ? alignItems
-        : textAlign) ?? 'start';
+    const newTextAlign = convertTextAlign(textAlign, alignItems);
 
     const fontsizeNum = pxToInt(fontSize);
 

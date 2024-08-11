@@ -13,7 +13,7 @@ import Explore from './explore';
 import Generate from './generate';
 
 export const App = () => {
-  const [input, setInput] = useState('https://purduepool.com');
+  const [input, setInput] = useState('');
   const [active, setActive] = useState('generate');
 
   return (

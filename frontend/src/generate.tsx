@@ -1,27 +1,8 @@
-import {
-  Box,
-  Button,
-  FormField,
-  MultilineInput,
-  Rows,
-  Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-  TextInput,
-  Title,
-} from '@canva/app-ui-kit';
-import { addNativeElement, getCurrentPageContext } from '@canva/design';
-import { auth } from '@canva/user';
+import { Box, Button, Rows, Switch, Text, TextInput } from '@canva/app-ui-kit';
+import { getCurrentPageContext } from '@canva/design';
 import React, { useState } from 'react';
-import styles from 'styles/components.css';
-import { addBox, delay, delayAddElements, Element } from 'utils/elements';
-import { findFonts } from '@canva/asset';
-import Explore from './explore';
-import { fetchBoxes, fetchTexts, scrapeAll } from 'utils/fetch';
+import { delayAddElements } from 'utils/elements';
+import { scrapeAll } from 'utils/fetch';
 import { checkIfSuported, generalizeURL } from 'utils/url';
 
 type State = 'idle' | 'loading' | 'success' | 'error';

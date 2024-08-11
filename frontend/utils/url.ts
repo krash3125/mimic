@@ -1,4 +1,5 @@
-const UNSUPPORTED_URLS = ['x.com', 'twitter.com', 'reddit.com'];
+// const UNSUPPORTED_URLS = ['x.com', 'twitter.com', 'reddit.com'];
+const UNSUPPORTED_URLS = ['reddit.com'];
 
 export const checkIfSuported = (url: string) => {
   url = url.toLowerCase();

@@ -16,9 +16,11 @@ export const getPlaywright = async ({
   headless?: boolean;
 }): Promise<GetPageType> => {
   chromium.use(StealthPlugin());
+
   const browser = await chromium.launch({
     headless,
   });
+
   const page = await browser.newPage();
 
   await page.setViewportSize({
@@ -124,3 +126,22 @@ export const convertWeightToText = (weight: string) => {
 };
 
 export const pxToInt = (px: string) => parseInt(px.replace('px', ''));
+
+export const convertTextAlign = (textAlign: string, alignItems?: string) => {
+  if (alignItems === 'center') {
+    return 'center';
+  }
+
+  switch (textAlign) {
+    case 'left':
+      return 'start';
+    case 'right':
+      return 'end';
+    case 'justify':
+      return 'justify';
+    case 'center':
+      return 'center';
+    default:
+      return 'start';
+  }
+};

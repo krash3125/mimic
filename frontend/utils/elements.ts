@@ -45,7 +45,8 @@ export const getBoxJson = ({
           borderRadiusTopRight,
         }),
         fill: {
-          color: bg === 'transparent' ? undefined : bg,
+          color: bg === 'transparent' || bg === 'img' ? undefined : bg,
+          dropTarget: bg === 'img',
         },
         stroke: {
           weight: borderWidth,

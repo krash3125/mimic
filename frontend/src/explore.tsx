@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Column,
-  Columns,
-  EyeIcon,
-  Rows,
-  Text,
-  Title,
-} from '@canva/app-ui-kit';
+import { Box, Column, Columns, EyeIcon, Rows, Text } from '@canva/app-ui-kit';
 import styles from 'styles/components.css';
 
 const Explore = ({
@@ -27,13 +19,6 @@ const Explore = ({
           setActive={setActive}
         />
         <ExampleSiteCard
-          title="Twitter"
-          url="https://x.com"
-          setInput={setInput}
-          setActive={setActive}
-        />
-
-        <ExampleSiteCard
           title="Spotify"
           url="https://open.spotify.com/"
           setInput={setInput}
@@ -42,6 +27,12 @@ const Explore = ({
         <ExampleSiteCard
           title="Twitch"
           url="https://twitch.tv/clix"
+          setInput={setInput}
+          setActive={setActive}
+        />
+        <ExampleSiteCard
+          title="MuSync"
+          url="https://musyncmc.vercel.app/"
           setInput={setInput}
           setActive={setActive}
         />
