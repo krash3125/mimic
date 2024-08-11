@@ -1,4 +1,6 @@
-import { Browser, ElementHandle, Page, chromium } from 'playwright';
+import { Browser, ElementHandle, Page } from 'playwright';
+import { chromium } from 'playwright-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 type GetPageType = [Page, Browser];
 
@@ -13,6 +15,7 @@ export const getPlaywright = async ({
   url: string;
   headless?: boolean;
 }): Promise<GetPageType> => {
+  chromium.use(StealthPlugin());
   const browser = await chromium.launch({
     headless,
   });

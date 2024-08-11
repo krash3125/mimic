@@ -12,7 +12,7 @@ export const getBoxes = async ({
   width: number;
 }) => {
   const boxes = await page.$$(
-    'div, section, main, nav, button, a, body, html, li, td, th, label, img, span, input, select, h1, h2, h3, h4, h5, h6, p'
+    'div, section, main, nav, button, a, body, html, li, td, th, label, img, span, input, select, h1, h2, h3, h4, h5, h6, p, aside'
   );
 
   let return_list: any[] = [];
@@ -45,7 +45,6 @@ export const getBoxes = async ({
       borderTopRightRadius,
       borderBottomLeftRadius,
       borderBottomRightRadius,
-      borderWidth,
       borderLeftWidth,
       borderRightWidth,
       borderTopWidth,
@@ -80,7 +79,6 @@ export const getBoxes = async ({
       borderTopRightRadius: pxToInt(borderTopRightRadius),
       borderBottomLeftRadius: pxToInt(borderBottomLeftRadius),
       borderBottomRightRadius: pxToInt(borderBottomRightRadius),
-      // borderWidth: pxToInt(borderWidth),
       borderWidth: newBorderWidth,
       borderColor: borderHex,
     };

@@ -27,17 +27,12 @@ const Explore = ({
           setActive={setActive}
         />
         <ExampleSiteCard
-          title="Purdue Pool"
-          url="https://purduepool.com"
+          title="Twitter"
+          url="https://x.com"
           setInput={setInput}
           setActive={setActive}
         />
-        <ExampleSiteCard
-          title="Shadcn"
-          url="https://ui.shadcn.com"
-          setInput={setInput}
-          setActive={setActive}
-        />
+
         <ExampleSiteCard
           title="Spotify"
           url="https://open.spotify.com/"
@@ -45,8 +40,14 @@ const Explore = ({
           setActive={setActive}
         />
         <ExampleSiteCard
-          title="Twitter"
-          url="https://www.twitter.com"
+          title="Twitch"
+          url="https://twitch.tv/clix"
+          setInput={setInput}
+          setActive={setActive}
+        />
+        <ExampleSiteCard
+          title="Shadcn"
+          url="https://ui.shadcn.com"
           setInput={setInput}
           setActive={setActive}
         />
