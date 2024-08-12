@@ -63,7 +63,7 @@ Next, we plan to enhance Mimic's capabilities by adding support for more complex
   npm start
 ```
 
-5. **Install backend dependencies**
+5. **Install backend dependencies** (in a new terminal)
 
 ```bash
   cd backend
