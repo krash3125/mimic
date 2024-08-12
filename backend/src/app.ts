@@ -23,7 +23,7 @@ app.get('/healthz', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.json({ version: '1.0.2' });
+  res.json({ version: '1.0.3' });
 });
 
 app.use('/api/v1', api);

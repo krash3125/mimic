@@ -26,6 +26,8 @@
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "playwright": "^1.45.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "rgb2hex": "^0.2.5"
   },
   "devDependencies": {
