@@ -23,7 +23,7 @@ app.get('/healthz', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.redirect('/healthz');
+  res.json({ version: '1.0.0' });
 });
 
 app.use('/api/v1', api);
