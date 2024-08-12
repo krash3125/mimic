@@ -12,7 +12,7 @@ ENV PORT=5000
 COPY backend/package*.json ./
 
 # Install app dependencies
-RUN npm install
+RUN npm install --production=false
 
 # Install Playwright dependencies
 RUN npx playwright install chromium

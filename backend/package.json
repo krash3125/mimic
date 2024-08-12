@@ -28,8 +28,7 @@
     "playwright": "^1.45.1",
     "playwright-extra": "^4.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "rgb2hex": "^0.2.5",
-    "typescript": "^5.4.4"
+    "rgb2hex": "^0.2.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -38,6 +37,7 @@
     "@types/node": "^20.12.6",
     "nodemon": "^3.1.0",
     "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.4"
   }
 }
