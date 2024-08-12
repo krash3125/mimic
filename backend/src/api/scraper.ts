@@ -15,33 +15,21 @@ router.post(
 
     let data: any = {};
 
-    console.log('reached here 1');
-
     const [page, browser] = await getPlaywright({ height, width, url });
-
-    console.log('reached here 2');
 
     if (includeBoxes) {
       const boxes = await getBoxes({ page, height, width });
       data = { boxes };
     }
 
-    console.log('reached here 3');
-
     if (includeTexts) {
       const texts = await getTexts({ page, height, width });
       data = { ...data, texts };
     }
 
-    console.log('reached here 4');
-
     res.json(data);
 
-    console.log('reached here 5');
-
     await browser.close();
-
-    console.log('reached here 6');
   })
 );
 

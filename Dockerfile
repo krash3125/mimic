@@ -15,8 +15,8 @@ COPY backend/package*.json ./
 RUN npm install --production=false
 
 # Install Playwright dependencies
-RUN npx playwright install chromium
-RUN npx playwright install-deps
+RUN npx playwright install chromium --with-deps
+# RUN npx playwright install-deps
 
 # Copy the rest of the backend code to the working directory
 COPY backend/ ./

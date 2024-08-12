@@ -1,6 +1,6 @@
-import { chromium, Browser, ElementHandle, Page } from 'playwright';
-// import { chromium } from 'playwright-extra';
-// import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { Browser, ElementHandle, Page } from 'playwright';
+import { chromium } from 'playwright-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 type GetPageType = [Page, Browser];
 
@@ -15,19 +15,13 @@ export const getPlaywright = async ({
   url: string;
   headless?: boolean;
 }): Promise<GetPageType> => {
-  // chromium.use(StealthPlugin());
-
-  console.log('Going to launch ');
+  chromium.use(StealthPlugin());
 
   const browser = await chromium.launch({
     headless,
   });
 
-  console.log('Browser launched');
-
   const page = await browser.newPage();
-
-  console.log('New page ');
 
   await page.setViewportSize({
     height: height,
@@ -35,8 +29,6 @@ export const getPlaywright = async ({
   });
 
   await page.goto(url);
-
-  console.log('URL ');
 
   return [page, browser];
 };
