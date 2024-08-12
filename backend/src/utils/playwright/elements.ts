@@ -26,14 +26,9 @@ export const getBoxes = async ({
     // Check if is image
     const tag = await box.evaluate((element) => element.tagName.toLowerCase());
 
-    console.log(tag);
     const isImage = await box.evaluate(
       (element) => element.tagName.toLowerCase() === 'img'
     );
-
-    if (isImage) {
-      console.log('IS IMAGE');
-    }
 
     // Root check for visibility
     const isVisibleRoot = await box.isVisible();
@@ -77,8 +72,6 @@ export const getBoxes = async ({
     if (!visible) {
       continue;
     }
-
-    console.log('reached here');
 
     const {
       backgroundColor,
@@ -227,11 +220,6 @@ export const getTexts = async ({
     // HERE CHECK INNER TEXT AND PARENT INNER TEXT AND IF THEY ARE BOTH THE SAME THEN ADD TO LIST
 
     const el = (await text.innerHTML()).replaceAll(/<\!--.*?-->/g, '');
-
-    // console.log('-----------------------');
-    // console.log(innerText);
-    // console.log(el);
-    // console.log('-----------------------');
 
     const {
       fontSize,
