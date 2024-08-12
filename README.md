@@ -37,3 +37,41 @@ We are proud of successfully integrating web scraping with Playwright and conver
 Next, we plan to enhance Mimic's capabilities by adding support for more complex web elements, such as interactive components and animations. We also aim to improve the user interface and provide more customization options for the extracted elements. Furthermore, we are exploring ways to integrate Mimic with other design tools to broaden its usability.
 
 ## Run Locally
+
+1. **Clone the project**
+
+```bash
+  git clone https://github.com/krash3125/mimic.git
+```
+
+2. **Go to the project directory**
+
+```bash
+  cd mimic
+```
+
+3. **Install frontend dependencies**
+
+```bash
+  cd frontend
+  npm install
+```
+
+4. **Start the frontend server**
+
+```bash
+  npm start
+```
+
+5. **Install backend dependencies**
+
+```bash
+  cd backend
+  npm install
+```
+
+6. **Start the backend server**
+
+```bash
+  npm start
+```
