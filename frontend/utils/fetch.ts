@@ -1,7 +1,7 @@
 import { PageContext } from '@canva/design';
-import { addBox, Element, getBoxJson } from './elements';
+import { Element, getBoxJson } from './elements';
 
-const BACKEND_URL = `http://localhost:5000`;
+const BACKEND_URL = 'https://mimic.koyeb.app';
 
 const boxDataToElements = (data: any) => {
   let elements: Element[] = [];
