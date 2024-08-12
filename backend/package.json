@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "build": "npx playwright install --with-deps && tsc",
+    "build": "tsc && npx playwright install --with-deps",
     "start:dist": "node dist/index.js",
     "lint": "eslint --fix src test",
     "typecheck": "tsc --noEmit"
