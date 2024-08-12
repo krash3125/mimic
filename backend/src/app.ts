@@ -22,10 +22,8 @@ app.get('/healthz', (req, res) => {
   res.sendStatus(200);
 });
 
-app.get<{}, MessageResponse>('/', (req, res) => {
-  res.json({
-    message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
-  });
+app.get('/', (req, res) => {
+  res.redirect('/healthz');
 });
 
 app.use('/api/v1', api);

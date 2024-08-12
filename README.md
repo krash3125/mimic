@@ -6,6 +6,13 @@ The inspiration for Mimic came from the need to easily transfer design elements 
 
 Mimic effortlessly converts website elements into customizable Canva elements. Users can transform any part of a website into design elements that can be used in their Canva projects, enabling limitless creativity and saving valuable time.
 
+## Features
+
+1. **Web Scraping**: Extract components and styling properties from web pages.
+2. **Canva Integration**: Convert web elements into Canva elements using the Canva Apps SDK.
+3. **Real-time Processing**: Instantly generate Canva elements from web elements.
+4. **Customization**: Modify the extracted elements to suit your design needs.
+
 ## How we built it
 
 We used a combination of web scraping with Playwright to extract visible text and styling properties from web pages. These elements are then converted into a format compatible with Canva using the Canva Apps SDK.
