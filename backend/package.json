@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npx playwright install chromium && npx playwright install-deps",
     "start:dist": "node dist/index.js",
     "lint": "eslint --fix src test",
     "typecheck": "tsc --noEmit"
@@ -19,7 +19,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@playwright/browser-chromium": "^1.46.0",
     "colorjs.io": "^0.5.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
