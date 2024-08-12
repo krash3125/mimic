@@ -177,7 +177,7 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export type Element = NativeElement | NativeElementWithBox;
 
 export const delayAddElements = async (elements: Element[]) => {
-  const BATCH_SIZE = 31;
+  const BATCH_SIZE = 20;
   const DELAY_MS = 10000;
 
   for (let i = 0; i < elements.length; i += BATCH_SIZE) {

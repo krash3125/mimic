@@ -9,6 +9,7 @@ Transform websites into Canva elements with Mimic
 ### Tagline <!-- 50 characters max -->
 
 Bring your favorite websites to Canva
+Build off of your favorite websites on Canva
 
 ### Description <!-- 200 characters max -->
 

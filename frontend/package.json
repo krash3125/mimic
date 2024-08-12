@@ -1,5 +1,5 @@
 {
-  "name": "canva-apps-sdk-starter-kit",
+  "name": "Mimic Frontend",
   "description": "A boilerplate for creating Canva Apps.",
   "engines": {
     "node": "^18 || ^20.10.0",

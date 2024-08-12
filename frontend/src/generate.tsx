@@ -43,7 +43,6 @@ const Generate = ({
 
       const elements = await scrapeAll(generalizedUrl, page, include);
 
-      console.log(elements.length);
       await delayAddElements(elements);
 
       setState('success');
@@ -72,7 +71,7 @@ const Generate = ({
           <Text variant="bold">Options</Text>
           <Box paddingStart="0.5u">
             <Switch
-              label="Include Divs"
+              label="Include Layout"
               value={includeDivs}
               onChange={setIncludeDivs}
               disabled={state === 'loading'}
