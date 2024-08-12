@@ -1,6 +1,6 @@
 ## Inspiration
 
-The inspiration for Mimic came from the need to easily transfer design elements from websites into Canva. We noticed that many designers and marketers spend a lot of time recreating specific web elements and layouts in their design projects. Mimic aims to streamline this process, making it quick and efficient.
+The inspiration for Mimic came from the need to easily transfer design elements from websites into Canva. We noticed that many designers and marketers spend a lot of time recreating specific web elements and layouts in their design projects. Mimic aims to streamline this process, making it timely and efficient.
 
 ## What it does
 
