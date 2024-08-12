@@ -1,7 +1,7 @@
 import { PageContext } from '@canva/design';
 import { Element, getBoxJson } from './elements';
 
-const BACKEND_URL = 'https://mimic.koyeb.app';
+const BACKEND_URL = 'https://mimic.kushk.me';
 
 const boxDataToElements = (data: any) => {
   let elements: Element[] = [];

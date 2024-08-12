@@ -100,11 +100,22 @@ const Generate = ({
           </Button>
         </Box>
       </Rows>
-      <Box paddingTop="3u">
-        <Text alignment="center" tone="tertiary" size="small">
-          Load times may vary due to canva's rate limit restrictions.
-        </Text>
-      </Box>
+      {state === 'loading' && (
+        <Box paddingTop="1u" paddingBottom="3u">
+          <Text alignment="center" tone="tertiary" size="small">
+            Depending on how complex the webpage is, it may take up to a minute
+            to load in all the styles. Thanks for being patient!
+          </Text>
+        </Box>
+      )}
+
+      {state !== 'loading' && (
+        <Box paddingTop="3u">
+          <Text alignment="center" tone="tertiary" size="small">
+            Load times may vary due to canva's rate limit restrictions.
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };
