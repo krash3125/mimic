@@ -60,7 +60,7 @@ Next, we plan to enhance Mimic's capabilities by adding support for more complex
 4. **Start the frontend server**
 
 ```bash
-  npm start
+  npm run start
 ```
 
 5. **Install backend dependencies** (in a new terminal)
@@ -73,5 +73,5 @@ Next, we plan to enhance Mimic's capabilities by adding support for more complex
 6. **Start the backend server**
 
 ```bash
-  npm start
+  npm run dev
 ```
